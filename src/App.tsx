@@ -9,19 +9,18 @@ import { SignInPage } from './pages/SignInPage';
 import { Wrapper } from './components/Container/Container.styled';
 import { SignUpPage } from './pages/SignUpPage';
 import { refreshUser } from './Redux/Auth/operations';
-import { ToastContainer } from 'react-toastify';
+import { Dispatch } from './Redux/store';
 
 export const App =()=>{
-  const dispatch = useDispatch();
+  const dispatch: Dispatch  = useDispatch();
   const { isRefreshing } = useAuth();
 
   
 
   useEffect(() => {
+    console.log("User refresh");
     dispatch(refreshUser());
   }, [dispatch]);
-
-
 
     return isRefreshing ? (
       <b>Refreshing user...</b>
@@ -34,7 +33,7 @@ export const App =()=>{
             path="/signin"
             element={
               <Wrapper>
-              <RestrictedRoute redirectTo="/" component={<SignInPage />} />
+              <RestrictedRoute redirectTo="/" element={<SignInPage />} />
               </Wrapper>
             }
           />
@@ -42,7 +41,7 @@ export const App =()=>{
             path="/signup"
             element={
                <Wrapper>
-              <RestrictedRoute redirectTo="/" component={<SignUpPage />} />
+              <RestrictedRoute redirectTo="/" element={<SignUpPage />} />
               </Wrapper>
             }
           />

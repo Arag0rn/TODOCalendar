@@ -1,23 +1,13 @@
-import { createSelector } from '@reduxjs/toolkit';
+import { AuthState } from '../Auth/slice'; 
 
-export const selectIsLoggedIn = state => state.auth.isLoggedIn;
+export const selectIsLoggedIn = (state: { auth: AuthState })=> state.auth.isLoggedIn;
 
-export const selectUser = state => state.auth.user;
+export const selectUser = (state: { auth: AuthState }) => state.auth.user;
 
-export const selectUserId = state => state.auth.user._id;
+// export const selectUserId = (state: AuthState) => state.user?._id;
 
-export const selectIsTelegramBotStarted = state =>
-  Boolean(state.auth.user.chatId);
+export const selectAvatar = (state: { auth: AuthState }) => state.auth.user?.avatarURL;
 
-export const selectAvatar = state => state.auth.user?.avatar;
+export const selectIsRefreshing = (state: { auth: AuthState }) => state.auth.isRefreshing;
 
-export const selectIsRefreshing = state => state.auth.isRefreshing;
-
-export const selectToken = createSelector(selectUser, user => user?.token);
-
-export const selectDailyWaterRequirement = createSelector(
-  selectUser,
-  user => user?.dailyWaterRequirement
-);
-
-export const selectIsError = state => state.auth.isError;
+export const selectIsError = (state: { auth: AuthState }) => state.auth.isError;

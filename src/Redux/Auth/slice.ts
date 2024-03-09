@@ -1,45 +1,34 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { logIn, logOut, register } from './operations';
+import { logIn, logOut, refreshUser, register } from './operations';
 import { toast } from 'react-toastify';
-// import {
-//   logIn,
-//   logOut,
-//   refreshUser,
-//   register,
-//   restoreUserPass,
-//   updateAvatar,
-//   updateDailyNormal,
-//   updateUserData,
-// } from './operations';
 
+export interface AuthState {
+  isLoggedIn: boolean;
+  isRefreshing: boolean;
+  isError: boolean;
+  token: string | null;
+  user: {
+    email: string | null;
+    avatarURL: string;
+  } | null;
+}
 
-type InitState = {
-    isLoggedIn: boolean;
-    isRefreshing: boolean;
-    isError: boolean;
-    token: string | null;
-    user: {
-        email: string;
-    } | null;
-};
+type InitState = AuthState;  
 
-const initialState = {
+const initialState: InitState = {
   user: null,
   token: null,
   isLoggedIn: false,
   isRefreshing: false,
   isError: false,
-} as InitState;
+};
+
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
     clearUserData: () => initialState,
-    google: (state, action) => ({
-      ...initialState,
-      token: action.payload,
-    }),
   },
 
   extraReducers: builder => {
@@ -53,18 +42,26 @@ const authSlice = createSlice({
     builder.addCase(logIn.fulfilled, (state, action) => {
       state.user = action.payload.user;
       state.token = action.payload.token;
+      console.log(action.payload);
+      
       state.isLoggedIn = true;
       state.isRefreshing = false;
       state.isError = false;
       toast.success('Login successful!');
     });
     builder.addCase(logOut.fulfilled, (state) => {
-      state.user = { name: null, email: null };
+      state.user = { email: null, avatarURL: ""};
       state.token = null;
       state.isLoggedIn = false;
       state.isRefreshing = false;
       state.isError = false;
     });
+    builder.addCase(refreshUser.fulfilled, (state, action) => {
+      state.user = action.payload;
+      state.isLoggedIn = true;
+      state.isRefreshing = false;
+       console.log(action);
+    })
     //pending
     builder.addCase(register.pending, state => {
       state.isRefreshing = true;
@@ -75,18 +72,20 @@ const authSlice = createSlice({
       state.isError = false;
     });
     //rejected
-    builder.addCase(logIn.rejected, (state, action) => {
+    builder.addCase(logIn.rejected, (state) => {
       state.isRefreshing = false;
-      state.isError = action.payload;
       toast.error(`Some error, try again`);
     });
-    builder.addCase(register.rejected, (state, action) => {
+    builder.addCase(register.rejected, (state) => {
       state.isRefreshing = false;
-      state.isError = action.payload;
       toast.error(`Some error, try again`);
     });
+    builder.addCase(refreshUser.rejected, (state) => {
+      state.isRefreshing = false;
+      toast.error(`Some error, try again`);
+    })
   },
 });
 
-export const { clearUserData , google} = authSlice.actions;
+export const { clearUserData } = authSlice.actions;
 export const authReducer = authSlice.reducer;

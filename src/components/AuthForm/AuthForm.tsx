@@ -19,6 +19,7 @@ import hidepas from '../images/AuthForm/hide_icon.svg';
 import google from '../images/AuthForm/google-icon.png';
 import { useEffect, useState } from 'react';
 import { logIn } from '../../Redux/Auth/operations';
+import { Dispatch } from '../../Redux/store';
 
 const SignupSchema = Yup.object().shape({
   email: Yup.string()
@@ -43,7 +44,7 @@ export const AuthForm = () => {
     isMobileScreen: window.innerWidth >= 320 && window.innerWidth < 768,
   });
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch:Dispatch = useDispatch();
 
   useEffect(() => {
     const handleWindowResize = () => {
@@ -61,17 +62,6 @@ export const AuthForm = () => {
   }, [screenSize]);
 
 
-  const handleSubmit = async (values, action) => {
-    await dispatch(
-      logIn({
-        email: values.email,
-        password: values.password,
-      })
-    );
-    action.resetForm();
-    setSendForm(true);
-  };
-
   return (
     <>
 
@@ -81,7 +71,15 @@ export const AuthForm = () => {
             password: '',
           }}
           validationSchema={SignupSchema}
-          onSubmit={handleSubmit}
+          onSubmit={async (values, action) => {
+            action.resetForm();
+            await dispatch(
+                logIn({
+                email: values.email,
+                password: values.password,
+              })
+            );
+          }}
         >
             <ForFormContainer>
           <StyledForm>

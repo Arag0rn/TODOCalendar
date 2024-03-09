@@ -3,6 +3,7 @@ import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
+
 import iconeye from '../images/AuthForm/show_icon.svg';
 import hidepas from '../images/AuthForm/hide_icon.svg';
 import { useEffect, useState } from 'react';
@@ -17,6 +18,7 @@ import {
   Styledlabel,
 } from '../AuthForm/AuthForm.styled';
 import { register } from '../../Redux/Auth/operations';
+import { Dispatch } from '../../Redux/store';
 
 
 const SignupSchema = Yup.object().shape({
@@ -45,7 +47,7 @@ export const SignUpAuthForm = () => {
     isMobileScreen: window.innerWidth < 768,
   });
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch: Dispatch = useDispatch();
 
   useEffect(() => {
     const handleWindowResize = () => {

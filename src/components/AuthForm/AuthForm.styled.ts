@@ -2,20 +2,12 @@ import { Form, ErrorMessage, Field  } from 'formik';
 import styled from 'styled-components';
 
 
-export const SightInContainer = styled.div`
-   @media screen and (min-width: 1440px) {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-`
+
 export const ForFormContainer = styled.div`
-   @media screen and (min-width: 1440px) {
     display: flex;
     flex-direction: column;
-    justify-self: center;
-  }
-
+    justify-content: center;
+    align-items: center;
 `  
 
 export const FormHead = styled.h2`
@@ -31,19 +23,10 @@ export  const StyledForm = styled(Form)`
     display: flex;
     flex-direction:column;
     border-radius: 5px;
-    width: 280px;
- }
-  @media screen and (min-width: 768px) {
     width: 336px;
-  
-  }
-
+ }
   @media screen and (min-width: 1440px) {
-    justify-content: start;
     width: 384px;
-    grid-column:7/9;
-    grid-row: 1;
-    align-self: center;
     
   }
 `
@@ -71,8 +54,6 @@ export const StyledField = styled(Field)`
         font-weight: 400;
         line-height: 1.23; 
     }
-    
-
 `
 
 export const Styledlabel = styled.label`
@@ -80,9 +61,7 @@ export const Styledlabel = styled.label`
         position: relative;
         font-size: 18px;
         font-weight: 400;
-        line-height: 1.33; 
- 
-    
+        line-height: 1.33;   
 `
 
 export const FormBtnStyled = styled.button`

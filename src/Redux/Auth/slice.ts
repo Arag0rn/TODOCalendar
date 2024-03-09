@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { logIn, logOut, register } from './operations';
+import { toast } from 'react-toastify';
 // import {
 //   logIn,
 //   logOut,
@@ -47,6 +48,7 @@ const authSlice = createSlice({
       state.user = action.payload.user;
       state.isRefreshing = false;
       state.isError = false;
+      toast.success('Registration successful!');
     });
     builder.addCase(logIn.fulfilled, (state, action) => {
       state.user = action.payload.user;
@@ -54,6 +56,7 @@ const authSlice = createSlice({
       state.isLoggedIn = true;
       state.isRefreshing = false;
       state.isError = false;
+      toast.success('Login successful!');
     });
     builder.addCase(logOut.fulfilled, (state) => {
       state.user = { name: null, email: null };
@@ -75,10 +78,12 @@ const authSlice = createSlice({
     builder.addCase(logIn.rejected, (state, action) => {
       state.isRefreshing = false;
       state.isError = action.payload;
+      toast.error(`Some error, try again`);
     });
     builder.addCase(register.rejected, (state, action) => {
       state.isRefreshing = false;
       state.isError = action.payload;
+      toast.error(`Some error, try again`);
     });
   },
 });

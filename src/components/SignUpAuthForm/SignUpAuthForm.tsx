@@ -1,24 +1,23 @@
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+import iconeye from '../images/AuthForm/show_icon.svg';
+import hidepas from '../images/AuthForm/hide_icon.svg';
+import { useEffect, useState } from 'react';
 import {
-  BottomBtnBox,
-  ErMsg,
   ForFormContainer,
+  ErMsg,
   FormBtnStyled,
-  GoogleBtn,
   SightUp,
   StyledBtn,
   StyledField,
   StyledForm,
   Styledlabel,
-} from './AuthForm.styled';
-import { useNavigate } from 'react-router-dom';
-import iconeye from '../images/AuthForm/show_icon.svg';
-import hidepas from '../images/AuthForm/hide_icon.svg';
-import google from '../images/AuthForm/google-icon.png';
-import { useEffect, useState } from 'react';
-import { logIn } from '../../Redux/Auth/operations';
+} from '../AuthForm/AuthForm.styled';
+import { register } from '../../Redux/Auth/operations';
+
 
 const SignupSchema = Yup.object().shape({
   email: Yup.string()
@@ -33,14 +32,17 @@ const SignupSchema = Yup.object().shape({
     .max(48, 'Too Long!')
     .matches(/[a-zA-Z]/, 'Must contain at least one letter')
     .required('Required'),
+  passwordRepeat: Yup.string()
+    .oneOf([Yup.ref('password')], 'Passwords must match')
+    .required('Required'),
 });
 
-export const AuthForm = () => {
+export const SignUpAuthForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [screenSize, setScreenSize] = useState({
     isDesctopScreen: typeof window !== 'undefined' && window.innerWidth >= 1440,
     isTabletScreen: window.innerWidth >= 768 && window.innerWidth < 1440,
-    isMobileScreen: window.innerWidth >= 320 && window.innerWidth < 768,
+    isMobileScreen: window.innerWidth < 768,
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -50,7 +52,7 @@ export const AuthForm = () => {
       setScreenSize({
         isDesctopScreen: window.innerWidth >= 1440,
         isTabletScreen: window.innerWidth >= 768 && window.innerWidth < 1440,
-        isMobileScreen: window.innerWidth >= 320 && window.innerWidth < 768,
+        isMobileScreen: window.innerWidth < 768,
       });
     };
 
@@ -60,38 +62,34 @@ export const AuthForm = () => {
     };
   }, [screenSize]);
 
-
-  const handleSubmit = async (values, action) => {
-    await dispatch(
-      logIn({
-        email: values.email,
-        password: values.password,
-      })
-    );
-    action.resetForm();
-    setSendForm(true);
-  };
-
   return (
     <>
-
+      <ForFormContainer>
         <Formik
           initialValues={{
             email: '',
             password: '',
+            passwordRepeat: '',
           }}
           validationSchema={SignupSchema}
-          onSubmit={handleSubmit}
+          onSubmit={async (values, action) => {
+            action.resetForm();
+            await dispatch(
+              register({
+                email: values.email,
+                password: values.password,
+              })
+            );
+          }}
         >
-            <ForFormContainer>
           <StyledForm>
-            <h2>Sign In</h2>
+            <h2>Sign Up</h2>
             <Styledlabel htmlFor="email">Enter your email</Styledlabel>
             <StyledField id="email" name="email" placeholder="E-mail" />
             <ErMsg component="span" name="email" />
 
             <Styledlabel htmlFor="password">
-              Enter your password{' '}
+              Enter your password
               <StyledBtn onClick={() => setShowPassword(!showPassword)}>
                 {showPassword ? (
                   <img
@@ -119,17 +117,42 @@ export const AuthForm = () => {
             />
 
             <ErMsg component="span" name="password" />
-            <FormBtnStyled type="submit">Sign In</FormBtnStyled>
-            <GoogleBtn type="button">
-              <img src={google} alt="Google Icon" width={20} height={20} />
-              Enter with Google
-            </GoogleBtn>
-            <BottomBtnBox>
-              <SightUp onClick={() => navigate('/signup')}>Sign up</SightUp>
-            </BottomBtnBox>
+
+            <Styledlabel htmlFor="passwordRepeat">
+              Repeat password
+              <StyledBtn onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? (
+                  <img
+                    src={iconeye}
+                    width={18}
+                    height={18}
+                    alt="Hide Password"
+                  />
+                ) : (
+                  <img
+                    src={hidepas}
+                    width={18}
+                    height={18}
+                    alt="Show Password"
+                  />
+                )}
+              </StyledBtn>
+            </Styledlabel>
+            <StyledField
+              id="passwordRepeat"
+              type={showPassword ? 'text' : 'password'}
+              name="passwordRepeat"
+              placeholder="Repeat password"
+              title="passwordRepeat"
+            />
+
+            <ErMsg component="span" name="passwordRepeat" />
+            <FormBtnStyled type="submit">Sign Up</FormBtnStyled>
+
+            <SightUp onClick={() => navigate('/signin')}>Sign in</SightUp>
           </StyledForm>
-          </ForFormContainer>
         </Formik>
+        </ForFormContainer>
     </>
   );
 };

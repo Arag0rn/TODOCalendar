@@ -10,6 +10,7 @@ import { Wrapper } from './components/Container/Container.styled';
 import { SignUpPage } from './pages/SignUpPage';
 import { refreshUser } from './Redux/Auth/operations';
 import { Dispatch } from './Redux/store';
+import { CalendarPage } from './pages/Calendar.page';
 
 export const App =()=>{
   const dispatch: Dispatch  = useDispatch();
@@ -28,6 +29,7 @@ export const App =()=>{
       <>
       <Routes>
       <Route path="/" element={<Layout/>}>
+      <Route index element={<CalendarPage />} /> 
       </Route>
       <Route
             path="/signin"

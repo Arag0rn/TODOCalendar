@@ -3,8 +3,8 @@ import { ButtonStyle, CurrentDayStyle, StyledCalendarMonth, StyledDay, StyledDay
 import BasicModal from '../Modal/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectTodo } from '../../Redux/ToDo/selectors';
-import { Dispatch } from '@reduxjs/toolkit';
 import { refreshTodo } from '../../Redux/ToDo/operations';
+import { Dispatch } from '../../Redux/store';
 // import { nanoid } from 'nanoid'
 
 interface CalendarMonthProps {
@@ -21,7 +21,7 @@ interface Todo {
 const CalendarMonth: React.FC<CalendarMonthProps> = ({ year }) => {
   const TODO = useSelector(selectTodo)
 
-  const dispatch: Dispatch = useDispatch();
+  const dispatch = useDispatch() as Dispatch;
 
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();

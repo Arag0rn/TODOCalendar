@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { authReducer } from "./Auth/slice";
+import { authReducer, AuthState } from "./Auth/slice";
 
 import storage from 'redux-persist/lib/storage';
 import {
@@ -12,6 +12,7 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
+import { todoReducer } from "./ToDo/slice";
 
 
 
@@ -25,7 +26,8 @@ const authPersistConfig = {
 export const store = configureStore({
 
   reducer: {
-    auth: persistReducer(authPersistConfig, authReducer),
+    auth: persistReducer<AuthState>(authPersistConfig, authReducer),
+    todo: todoReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

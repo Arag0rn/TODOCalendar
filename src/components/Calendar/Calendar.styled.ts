@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const StyledCalendarMonth = styled.div`
-  margin: 20px;
+  margin-top: 60px;
   padding: 10px;
   text-align: center;
 `;
@@ -34,6 +34,7 @@ export const StyledDaysGrid = styled.div`
 `;
 
 export const StyledDay = styled.div`
+    position: relative;
   padding: 10px;
   min-height:100px;
   border: 1px solid #ddd;
@@ -45,4 +46,20 @@ export const StyledEmptyDay = styled.div`
 
 export const CurrentDayStyle = styled.div`
    border: 1px solid red;
+`;
+
+export const ButtonStyle = styled.div`
+    display:flex;
+`;
+
+export const Todo = styled.button`
+    position: absolute;
+    top: 5px;
+    right:5px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+`;
+export const StyledTodo = styled.button`
+    border: 1px solid red;
 `;

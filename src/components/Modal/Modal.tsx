@@ -12,6 +12,7 @@ const style = {
   position: 'absolute',
   top: '50%',
   left: '50%',
+  display: 'flex',
   transform: 'translate(-50%, -50%)',
   width: 400,
   bgcolor: 'background.paper',
@@ -21,8 +22,10 @@ const style = {
   p: 4,
 };
 
-export default function BasicModal({ day }: { day: number }) {
+export default function BasicModal({ day, selectedMonth }: { day: string, selectedMonth: string }) {
   const [open, setOpen] = useState(false);
+  console.log(selectedMonth);
+  
   
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -42,9 +45,10 @@ export default function BasicModal({ day }: { day: number }) {
           initialValues={{
             id: null,
             title: '',
-            position: 0,
+            position: '',
             description: '',
             completed: false,
+            month:''
           }}
           onSubmit={async (values, action) => {
             action.resetForm();
@@ -54,7 +58,8 @@ export default function BasicModal({ day }: { day: number }) {
                 title: values.title,
                 position: day,
                 description: values.description,
-                completed: values.completed
+                completed: values.completed,
+                month: selectedMonth
               })
             );
           }}
@@ -65,8 +70,8 @@ export default function BasicModal({ day }: { day: number }) {
                 <Field type="text" id="title" name="title" />
               </div>
               <div>
-                <label htmlFor="position">Position:</label>
-                <Field type="text" id="position" name="position" readOnly />
+              <label htmlFor="description">Description:</label>
+                <Field type="text" id="description" name="description" />
               </div>
               <div>
                 <label htmlFor="completed">Completed:</label>

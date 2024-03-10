@@ -4,11 +4,12 @@ import { addTodo, refreshTodo } from './operations';
 
 export interface TodoState {
   todos: Array<{
-    id: null;
+    id: string;
     title: string;
-    position: number;
+    position: string;
     description: string;
     completed: boolean;
+    month: string;
   }>;
 }
 
@@ -17,11 +18,12 @@ type InitState = TodoState;
 const initialState: InitState = {
   todos: [
     {
-      id: null,
+      id: '',
       title: '',
       description: '',
-      position: 0,
+      position: '',
       completed: false,
+      month: '',
     },
   ],
 };

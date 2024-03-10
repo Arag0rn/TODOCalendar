@@ -6,9 +6,10 @@ axios.defaults.baseURL = 'http://localhost:3000/';
 interface TodoData {
     id: null;
     title: string;
-    position: number;
+    position: string;
     description: string;
     completed: boolean;
+    month: string;
   }
 
 export const addTodo = createAsyncThunk(

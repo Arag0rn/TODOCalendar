@@ -13,13 +13,18 @@ interface CalendarMonthProps {
 }
 
 interface Todo {
-  id: number;
-  text: string;
-  originalDay: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [x: string]: any;
+  id: string;
+  title: string;
+  position: string;
+  description: string;
+  completed: boolean;
+  month:string;
 }
 
 const CalendarMonth: React.FC<CalendarMonthProps> = ({ year }) => {
-  const TODO = useSelector(selectTodo)
+  const TODO: Todo[] = useSelector(selectTodo);
 
   const dispatch = useDispatch() as Dispatch;
 
@@ -34,8 +39,8 @@ const CalendarMonth: React.FC<CalendarMonthProps> = ({ year }) => {
       setSelectedMonth((prevMonth) => (prevMonth === 1 ? 12 : prevMonth - 1));
     };
     const [selectedMonth, setSelectedMonth] = useState(currentMonth);
-    const [todos, setTodos] = useState<Record<number, Todo[]>>({});
-    const [draggedTodo, setDraggedTodo] = useState<Todo | null>(null);
+    // const [todos, setTodos] = useState<Record<number, Todo[]>>({});
+    // const [draggedTodo, setDraggedTodo] = useState<Todo | null>(null);
 
  
  useEffect(() => {
@@ -63,22 +68,24 @@ const CalendarMonth: React.FC<CalendarMonthProps> = ({ year }) => {
       
     // };
   
-    const handleEndDrag = (day: number) => {
-      if (draggedTodo) {
-        setTodos((prevTodos) => ({
-          ...prevTodos,
-          [day]: [
-            ...(prevTodos[day] || []),
-            draggedTodo,
-          ],
-        }));
-        setDraggedTodo(null);
-      }
-    };
+    // const handleEndDrag = (day: number) => {
+    //   if (draggedTodo) {
+    //     setTodos((prevTodos) => ({
+    //       ...prevTodos,
+    //       [day]: [
+    //         ...(prevTodos[day] || []),
+    //         draggedTodo,
+    //       ],
+    //     }));
+    //     setDraggedTodo(null);
+    //   }
+    // };
   
     useEffect(() => {
         console.log('Выбран новый месяц:', selectedMonth);
       }, [selectedMonth]);
+
+     
   
     return (
       <StyledCalendarMonth>
@@ -104,7 +111,6 @@ const CalendarMonth: React.FC<CalendarMonthProps> = ({ year }) => {
           <StyledDay
             key={day}
             onDragOver={(e) => e.preventDefault()}
-            onDrop={() => handleEndDrag(day)}
           >
             {day === currentDay ? (
               <CurrentDayStyle>
@@ -113,22 +119,20 @@ const CalendarMonth: React.FC<CalendarMonthProps> = ({ year }) => {
             ) : (
               <div>
                 {day}
-                {todos[day] && (
                   <ul>
-                    {todos[day].map((todo) => (
+                    {TODO.map((todo: Todo) => ( todo.position === day.toString() && todo.month === selectedMonth.toString() &&
                       <StyledTodo
                         key={todo.id}
                         draggable
                         // onDragStart={() => handleStartDrag(todo)}
                       >
-                        {todo.text}
+                        {todo.title}
                       </StyledTodo>
                     ))}
                   </ul>
-                )}
               </div>
             )}
-         <BasicModal day={day}/>
+         <BasicModal day={day.toString()} selectedMonth={selectedMonth.toString()}/>
           </StyledDay>
           
 ))}

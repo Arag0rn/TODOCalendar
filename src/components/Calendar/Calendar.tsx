@@ -3,9 +3,9 @@ import { ButtonStyle, CurrentDayStyle, StyledCalendarMonth, StyledDay, StyledDay
 import BasicModal from '../Modal/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectTodo } from '../../Redux/ToDo/selectors';
-import { refreshTodo } from '../../Redux/ToDo/operations';
+import { editTodoPosition, refreshTodo } from '../../Redux/ToDo/operations';
 import { Dispatch } from '../../Redux/store';
-// import { nanoid } from 'nanoid'
+import { nanoid } from 'nanoid'
 
 interface CalendarMonthProps {
   year: number;
@@ -15,7 +15,6 @@ interface CalendarMonthProps {
 interface Todo {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [x: string]: any;
-  id: string;
   title: string;
   position: string;
   description: string;
@@ -25,12 +24,15 @@ interface Todo {
 
 const CalendarMonth: React.FC<CalendarMonthProps> = ({ year }) => {
   const TODO: Todo[] = useSelector(selectTodo);
+  console.log(TODO);
+  
 
   const dispatch = useDispatch() as Dispatch;
 
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth() + 1;
+
     const handleNextMonth = () => {
       setSelectedMonth((prevMonth) => (prevMonth === 12 ? 1 : prevMonth + 1));
     };
@@ -39,50 +41,44 @@ const CalendarMonth: React.FC<CalendarMonthProps> = ({ year }) => {
       setSelectedMonth((prevMonth) => (prevMonth === 1 ? 12 : prevMonth - 1));
     };
     const [selectedMonth, setSelectedMonth] = useState(currentMonth);
-    // const [todos, setTodos] = useState<Record<number, Todo[]>>({});
-    // const [draggedTodo, setDraggedTodo] = useState<Todo | null>(null);
+    const [draggedTodo, setDraggedTodo] = useState<Todo | null>(null);
 
  
  useEffect(() => {
-  console.log("User refresh");
   dispatch(refreshTodo());
 }, [dispatch]);
 
-    
-  console.log(TODO);
     const currentDay = currentDate.getDate();
     const daysInMonth = new Date(currentYear, selectedMonth, 0).getDate();
   
     const firstDayOfWeek = new Date(currentYear, selectedMonth - 1, 1).getDay();
     const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+  
+    const onDragStart = (event: React.DragEvent, todo: Todo) => {
+      event.dataTransfer.setData('text/plain', ''); 
+      setDraggedTodo(todo);
+    };
 
-    // const handleAddTodo = (day: number, todoText: string) => {
+
+    const onDragOver = (event: React.DragEvent) => {
+      event.preventDefault();
+    };
   
-    // };
-  
-    // const handleStartDrag = (todo: Todo, day: number) => {
-    //   setDraggedTodo({
-    //     ...todo,
-    //     originalDay: day.toString(),
-    //   });
-      
-    // };
-  
-    // const handleEndDrag = (day: number) => {
-    //   if (draggedTodo) {
-    //     setTodos((prevTodos) => ({
-    //       ...prevTodos,
-    //       [day]: [
-    //         ...(prevTodos[day] || []),
-    //         draggedTodo,
-    //       ],
-    //     }));
-    //     setDraggedTodo(null);
-    //   }
-    // };
+    const handleDrop = (event: React.DragEvent, day: number) => {
+      event.preventDefault();
+      if (draggedTodo) {
+        const newPosition = `${day}`; 
+         dispatch(
+          editTodoPosition({
+            ...draggedTodo,
+            position: newPosition,
+          })
+        );
+        setDraggedTodo(null);
+      }
+    }
   
     useEffect(() => {
-        console.log('Выбран новый месяц:', selectedMonth);
       }, [selectedMonth]);
 
      
@@ -110,7 +106,8 @@ const CalendarMonth: React.FC<CalendarMonthProps> = ({ year }) => {
          {days.map((day) => (
           <StyledDay
             key={day}
-            onDragOver={(e) => e.preventDefault()}
+            onDragOver={(e) => onDragOver(e)}
+            onDrop={(e) => handleDrop(e, day)}
           >
             {day === currentDay ? (
               <CurrentDayStyle>
@@ -122,9 +119,9 @@ const CalendarMonth: React.FC<CalendarMonthProps> = ({ year }) => {
                   <ul>
                     {TODO.map((todo: Todo) => ( todo.position === day.toString() && todo.month === selectedMonth.toString() &&
                       <StyledTodo
-                        key={todo.id}
+                        key={nanoid()}
                         draggable
-                        // onDragStart={() => handleStartDrag(todo)}
+                        onDragStart={(e) => onDragStart(e, todo)}
                       >
                         {todo.title}
                       </StyledTodo>

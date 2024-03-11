@@ -4,7 +4,7 @@ import axios from 'axios';
 axios.defaults.baseURL = 'http://localhost:3000/';
 
 interface TodoData {
-    id: null;
+    _id?: string;
     title: string;
     position: string;
     description: string;
@@ -15,10 +15,8 @@ interface TodoData {
 export const addTodo = createAsyncThunk(
     'todo/add',
     async (newTodo:TodoData, thunkAPI) => {
-      console.log(newTodo);
       try {
         const res = await axios.post('/api/todo', newTodo);
-        console.log(res)
         return res.data;
       } catch (error) {
         return thunkAPI.rejectWithValue(error);
@@ -32,11 +30,29 @@ export const addTodo = createAsyncThunk(
     'todo/getAlls',
     async function(_, { rejectWithValue }) {
       try {
-        const response = await axios.get(`api/todo/`) 
+        const response = await axios.get(`/api/todo`) 
   
         return response.data;
       } catch (error) {
         return rejectWithValue(error)
+      }
+    }
+  )
+
+  export const editTodoPosition = createAsyncThunk(
+    'todo/editPosition',
+    async (data:TodoData, thunkAPI) => {
+        console.log(data);
+        const { _id, position } = data;
+       
+      try {
+        const response = await axios.patch(`api/todo/${_id}`, {
+            position,
+        });
+        console.log(response);
+        return response.data;
+      } catch (error) {
+        return thunkAPI.rejectWithValue(error);
       }
     }
   )

@@ -24,8 +24,6 @@ const style = {
 
 export default function BasicModal({ day, selectedMonth }: { day: string, selectedMonth: string }) {
   const [open, setOpen] = useState(false);
-  console.log(selectedMonth);
-  
   
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -43,7 +41,6 @@ export default function BasicModal({ day, selectedMonth }: { day: string, select
         <Box sx={style}>
         <Formik
           initialValues={{
-            id: null,
             title: '',
             position: '',
             description: '',
@@ -54,7 +51,6 @@ export default function BasicModal({ day, selectedMonth }: { day: string, select
             action.resetForm();
             await dispatch(
               addTodo({
-                id: values.id,
                 title: values.title,
                 position: day,
                 description: values.description,

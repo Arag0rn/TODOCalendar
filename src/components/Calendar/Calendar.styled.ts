@@ -60,6 +60,6 @@ export const Todo = styled.button`
     height: 30px;
     border-radius: 50%;
 `;
-export const StyledTodo = styled.button`
+export const StyledTodo = styled.div`
     border: 1px solid red;
 `;

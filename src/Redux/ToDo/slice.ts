@@ -44,9 +44,15 @@ const todoSlice = createSlice({
       state.todos = [...action.payload];
     });
     builder.addCase(editTodoPosition.fulfilled, (state, action) => {
-        state.todos.push(action.payload);
-        state.isLoading = false;
-      });
+      const updatedTodo = action.payload;
+      const existingIndex = state.todos.findIndex(todo => todo.title === updatedTodo.title);
+      if (existingIndex !== -1) {
+        state.todos[existingIndex] = updatedTodo;
+      } else {
+        state.todos.push(updatedTodo);
+      }
+      state.isLoading = false;
+    });
       builder.addCase(editTodoPosition.pending, (state) => {
         state.isLoading = true;
       });

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { ButtonStyle, CurrentDayStyle, StyledCalendarMonth, StyledDay, StyledDayHeader, StyledDays, StyledDaysGrid, StyledEmptyDay, StyledTodo } from './Calendar.styled';
+import { ButtonStyle, StyledCalendarMonth, StyledCurrentHead, StyledDay, StyledDayHeader, StyledDays, StyledDaysGrid, StyledEmptyDay, StyledTodo, StyledTodoList } from './Calendar.styled';
 import BasicModal from '../Modal/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectTodo } from '../../Redux/ToDo/selectors';
 import { editTodoPosition, refreshTodo } from '../../Redux/ToDo/operations';
 import { Dispatch } from '../../Redux/store';
 import { nanoid } from 'nanoid'
+import TodoModal from '../TodoModal/TodoModal';
 
 interface CalendarMonthProps {
   year: number;
@@ -20,6 +21,7 @@ interface Todo {
   description: string;
   completed: boolean;
   month:string;
+  time: string;
 }
 
 const CalendarMonth: React.FC<CalendarMonthProps> = ({ year }) => {
@@ -80,8 +82,6 @@ const CalendarMonth: React.FC<CalendarMonthProps> = ({ year }) => {
   
     useEffect(() => {
       }, [selectedMonth]);
-
-     
   
     return (
       <StyledCalendarMonth>
@@ -94,7 +94,7 @@ const CalendarMonth: React.FC<CalendarMonthProps> = ({ year }) => {
 
         <StyledDays>
           {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-            <StyledDayHeader key={day}>
+          <StyledDayHeader key={day}>
               {day}
             </StyledDayHeader>
           ))}
@@ -109,26 +109,23 @@ const CalendarMonth: React.FC<CalendarMonthProps> = ({ year }) => {
             onDragOver={(e) => onDragOver(e)}
             onDrop={(e) => handleDrop(e, day)}
           >
-            {day === currentDay ? (
-              <CurrentDayStyle>
-                {day}
-              </CurrentDayStyle>
-            ) : (
               <div>
-                {day}
-                  <ul>
+              {day === currentDay && currentMonth === selectedMonth ? (<StyledCurrentHead>{day}</StyledCurrentHead>):(<span>{day}</span>)}
+                  <StyledTodoList>
                     {TODO.map((todo: Todo) => ( todo.position === day.toString() && todo.month === selectedMonth.toString() &&
                       <StyledTodo
                         key={nanoid()}
                         draggable
                         onDragStart={(e) => onDragStart(e, todo)}
-                      >
-                        {todo.title}
+                      ><span>{todo.title}</span>
+                        <span>{todo.time}</span>
+                        <TodoModal todo={todo} day={day.toString()} selectedMonth={selectedMonth.toString()}/>
                       </StyledTodo>
+                      
                     ))}
-                  </ul>
+                  </StyledTodoList>
               </div>
-            )}
+         
          <BasicModal day={day.toString()} selectedMonth={selectedMonth.toString()}/>
           </StyledDay>
           

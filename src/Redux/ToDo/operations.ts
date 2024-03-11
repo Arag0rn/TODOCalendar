@@ -10,11 +10,14 @@ interface TodoData {
     description: string;
     completed: boolean;
     month: string;
+    time: string;
   }
 
 export const addTodo = createAsyncThunk(
     'todo/add',
     async (newTodo:TodoData, thunkAPI) => {
+      console.log(newTodo);
+      
       try {
         const res = await axios.post('/api/todo', newTodo);
         return res.data;
@@ -42,14 +45,28 @@ export const addTodo = createAsyncThunk(
   export const editTodoPosition = createAsyncThunk(
     'todo/editPosition',
     async (data:TodoData, thunkAPI) => {
-        console.log(data);
-        const { _id, position } = data;
-       
+        const { _id, position } = data;   
       try {
         const response = await axios.patch(`api/todo/${_id}`, {
             position,
         });
-        console.log(response);
+        return response.data;
+      } catch (error) {
+        return thunkAPI.rejectWithValue(error);
+      }
+    }
+  )
+
+  export const editTodo = createAsyncThunk(
+    'todo/editTodo',
+    async (data:TodoData, thunkAPI) => {
+        const { _id, title, description, time } = data;   
+      try {
+        const response = await axios.patch(`api/todo/${_id}`, {
+            title,
+            description,
+            time
+        });
         return response.data;
       } catch (error) {
         return thunkAPI.rejectWithValue(error);

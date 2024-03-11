@@ -37,6 +37,7 @@ export const StyledDay = styled.div`
     position: relative;
   padding: 10px;
   min-height:100px;
+  background-color: #f2f0ed;
   border: 1px solid #ddd;
 `;
 
@@ -61,5 +62,22 @@ export const Todo = styled.button`
     border-radius: 50%;
 `;
 export const StyledTodo = styled.div`
-    border: 1px solid red;
+    display: flex;
+    justify-content: space-between;
+    background-color: #abf7b5;
+`;
+
+export const StyledCurrentHead = styled.span`
+    padding: 3px;
+    background-color: #d44e4e;
+    border-radius:50%;
+    color: white;
+`;
+
+export const StyledTodoList = styled.ul`
+  margin-top: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
 `;

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import { addTodo, editTodoPosition, refreshTodo } from './operations';
+import { addTodo, editTodo, editTodoPosition, refreshTodo } from './operations';
 
 export interface TodoState {
   todos: Array<{
@@ -9,6 +9,8 @@ export interface TodoState {
     description: string;
     completed: boolean;
     month: string;
+    time: string;
+    _id?: string;
   }>;
   isLoading: boolean,
 }
@@ -23,6 +25,7 @@ const initialState: InitState = {
       position: '',
       completed: false,
       month: '',
+      time: ''
     },
   ],
   isLoading: false,
@@ -53,9 +56,19 @@ const todoSlice = createSlice({
       }
       state.isLoading = false;
     });
+    builder.addCase(editTodo.fulfilled, (state, action) => {
+        const updatedTodo = action.payload;
+        const index = state.todos.findIndex((todo) => todo._id === updatedTodo._id);
+        if (index !== -1) {
+          state.todos[index] = { ...state.todos[index], ...updatedTodo };
+        }
+      
+        state.isLoading = false;
+      });
       builder.addCase(editTodoPosition.pending, (state) => {
         state.isLoading = true;
       });
+
 //       state.isLoggedIn = true;
 //       state.isRefreshing = false;
 //       state.isError = false;

@@ -57,7 +57,6 @@ export const LogoStyled = styled.img`
 export const StyledNavLink = styled(NavLink)`
   align-items: center;
   cursor: pointer;
-
   transition: all 0.3s;
   &:hover,
   &:focus {

@@ -11,14 +11,8 @@ import { selectAvatar, selectUser } from '../../Redux/Auth/selectors';
 export const UserLogo = () => {
   const userData = useSelector(selectUser);
   const Avatar = useSelector(selectAvatar);
-  console.log(Avatar);
-  
-  
-  
+
   const usernameFromEmail = userData?.email ? userData.email.split('@')[0] : 'V';
-
-
- console.log(userData);
  
   return (
     <UserLogoWrapper>

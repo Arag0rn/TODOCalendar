@@ -3,11 +3,11 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { useState } from 'react';
 import { Field, Form, Formik } from 'formik';
-import { addTodo } from '../../Redux/ToDo/operations';
+import { editTodo } from '../../Redux/ToDo/operations';
 import { useDispatch } from 'react-redux';
 import { Dispatch } from '../../Redux/store';
-import { StyledButton } from './Modal.styled';
 import AddIcon from '../images/addBytton.svg';
+import { StyledButton, StyledField } from './TodoModal.styled';
 
 
 const style = {
@@ -24,16 +24,36 @@ const style = {
   p: 4,
 };
 
-export default function BasicModal({ day, selectedMonth }: { day: string, selectedMonth: string }) {
+export default function TodoModal({ day, selectedMonth, todo }: 
+    { 
+    day: string, 
+    selectedMonth: string,
+    todo: 
+        { 
+        title: string;
+        position: string;
+        description: string;
+        completed: boolean;
+        month:string;
+        time: string;
+        _id?: string;
+    }}
+) 
+
+{
+
+    console.log(todo);
+    
   const [open, setOpen] = useState(false);
+  const dispatch: Dispatch = useDispatch();
   
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const dispatch: Dispatch = useDispatch();
+
 
   return (
     <div>
-      <StyledButton onClick={handleOpen}><img src={AddIcon} alt="AddIcon" /></StyledButton>
+      <StyledButton onClick={handleOpen}><img src={AddIcon} width={10} alt="AddIcon" /></StyledButton>
       <Modal
         open={open}
         onClose={handleClose}
@@ -43,32 +63,34 @@ export default function BasicModal({ day, selectedMonth }: { day: string, select
         <Box sx={style}>
         <Formik
           initialValues={{
-            title: '',
-            position: '',
-            description: '',
+            title: todo.title,
+            position: todo.position,
+            description: todo.description,
             completed: false,
-            month:'',
-            time: ''
+            month:selectedMonth,
+            time: todo.time,
+            _id: todo._id
           }}
           onSubmit={async (values, action) => {
             action.resetForm();
             await dispatch(
-              addTodo({
+                editTodo({
                 title: values.title,
                 position: day,
                 description: values.description,
                 completed: values.completed,
                 month: selectedMonth,
                 time: values.time,
+                _id: todo._id
               })
             );
           }}
         >
         <Form>
    
-                <Field type="text" id="title" name="title" placeholder="Title"/>
+                <StyledField type="text" id="title" name="title" placeholder="Title"/>
 
-                <Field type="text" id="description" name="description"  placeholder="Description"/>
+                <StyledField type="text" id="description" name="description"  placeholder="Description"/>
               <div>
               <label htmlFor="timeInput"></label>
                 <Field
@@ -82,7 +104,7 @@ export default function BasicModal({ day, selectedMonth }: { day: string, select
                 <Field type="checkbox" id="completed" name="completed" />
               </div>
               <div>
-                <button type="submit">Submit</button>
+                <button type="submit">Edit</button>
               </div>
         </Form>
 

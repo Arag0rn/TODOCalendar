@@ -7,6 +7,8 @@ import { editTodoPosition, refreshTodo } from '../../Redux/ToDo/operations';
 import { Dispatch } from '../../Redux/store';
 import { nanoid } from 'nanoid'
 import TodoModal from '../TodoModal/TodoModal';
+// import { sortedTodoByTime } from '../../Redux/Filter/selectors';
+// import { onFilter } from '../../Redux/Filter/slice';
 
 interface CalendarMonthProps {
   year: number;
@@ -26,9 +28,16 @@ interface Todo {
 
 const CalendarMonth: React.FC<CalendarMonthProps> = ({ year }) => {
   const TODO: Todo[] = useSelector(selectTodo);
+
   console.log(TODO);
   
+  const sortedTODO = [...TODO].sort((a, b) => {
+    const timeA = a?.time || ""; // Если a.time определено, используем его, иначе используем пустую строку
+    const timeB = b?.time || ""; // Аналогично для b.time
+    return timeA.localeCompare(timeB);
+  });
 
+  console.log(sortedTODO);
   const dispatch = useDispatch() as Dispatch;
 
     const currentDate = new Date();
@@ -48,6 +57,8 @@ const CalendarMonth: React.FC<CalendarMonthProps> = ({ year }) => {
  
  useEffect(() => {
   dispatch(refreshTodo());
+  // dispatch(onFilter(TODO))
+  
 }, [dispatch]);
 
     const currentDay = currentDate.getDate();
@@ -112,16 +123,16 @@ const CalendarMonth: React.FC<CalendarMonthProps> = ({ year }) => {
               <div>
               {day === currentDay && currentMonth === selectedMonth ? (<StyledCurrentHead>{day}</StyledCurrentHead>):(<span>{day}</span>)}
                   <StyledTodoList>
-                    {TODO.map((todo: Todo) => ( todo.position === day.toString() && todo.month === selectedMonth.toString() &&
+                    {sortedTODO
+                    .map((todo: Todo) => ( todo.position === day.toString() && todo.month === selectedMonth.toString() &&
                       <StyledTodo
                         key={nanoid()}
                         draggable
                         onDragStart={(e) => onDragStart(e, todo)}
                       ><span>{todo.title}</span>
                         <span>{todo.time}</span>
-                        <TodoModal todo={todo} day={day.toString()} selectedMonth={selectedMonth.toString()}/>
+                        <TodoModal todo={todo}  day={day.toString()} selectedMonth={selectedMonth.toString()}/>
                       </StyledTodo>
-                      
                     ))}
                   </StyledTodoList>
               </div>

@@ -62,8 +62,9 @@ export const Todo = styled.button`
     border-radius: 50%;
 `;
 export const StyledTodo = styled.div`
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr;
+    align-items: center;
     background-color: #abf7b5;
 `;
 
@@ -78,6 +79,7 @@ export const StyledTodoList = styled.ul`
   margin-top: 5px;
   display: flex;
   flex-direction: column;
+
   gap: 5px;
 
 `;

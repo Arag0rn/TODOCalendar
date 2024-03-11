@@ -19,7 +19,6 @@ export const App =()=>{
   
 
   useEffect(() => {
-    console.log("User refresh");
     dispatch(refreshUser());
   }, [dispatch]);
 

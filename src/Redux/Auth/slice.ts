@@ -58,7 +58,6 @@ const authSlice = createSlice({
       state.user = action.payload;
       state.isLoggedIn = true;
       state.isRefreshing = false;
-       console.log(action);
     })
     //pending
     builder.addCase(register.pending, state => {

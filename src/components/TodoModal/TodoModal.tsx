@@ -40,10 +40,7 @@ export default function TodoModal({ day, selectedMonth, todo }:
     }}
 ) 
 
-{
-
-    console.log(todo);
-    
+{   
   const [open, setOpen] = useState(false);
   const dispatch: Dispatch = useDispatch();
   

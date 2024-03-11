@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:3000/';
+axios.defaults.baseURL = 'https://todo-calendar-back.vercel.app';
 
 interface TodoData {
     _id?: string;
@@ -15,9 +15,7 @@ interface TodoData {
 
 export const addTodo = createAsyncThunk(
     'todo/add',
-    async (newTodo:TodoData, thunkAPI) => {
-      console.log(newTodo);
-      
+    async (newTodo:TodoData, thunkAPI) => {   
       try {
         const res = await axios.post('/api/todo', newTodo);
         return res.data;
@@ -33,8 +31,7 @@ export const addTodo = createAsyncThunk(
     'todo/getAlls',
     async function(_, { rejectWithValue }) {
       try {
-        const response = await axios.get(`/api/todo`) 
-  
+        const response = await axios.get(`/api/todo`)  
         return response.data;
       } catch (error) {
         return rejectWithValue(error)

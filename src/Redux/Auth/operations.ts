@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { AuthState } from './slice';
 
-axios.defaults.baseURL = 'http://localhost:3000/';
+axios.defaults.baseURL = 'https://todo-calendar-back.vercel.app';
 
 const setAuthHeader = (token: string) => {
   axios.defaults.headers.common.Authorization = `Bearer ${token}`;
@@ -20,11 +20,9 @@ interface RegisterData {
 export const register = createAsyncThunk(
   'auth/register',
   async (newUser:RegisterData, thunkAPI) => {
-    console.log(newUser);
     try {
       const res = await axios.post('api/user/register', newUser);
       setAuthHeader(res.data.token);
-      console.log(res)
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

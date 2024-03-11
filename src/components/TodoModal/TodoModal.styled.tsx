@@ -3,7 +3,6 @@ import { Field } from 'formik';
 import styled from 'styled-components';
 
 export const StyledButton = styled.div`
-
     padding: 10px;
     text-align: center;
     cursor: pointer;

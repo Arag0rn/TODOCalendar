@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { FilterTodoComp } from '../components/FilterTodo/FilterTodoComp'
 
 export const FilterTodo = () => {

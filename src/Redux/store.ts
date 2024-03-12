@@ -13,6 +13,7 @@ import {
   REGISTER,
 } from 'redux-persist';
 import { todoReducer } from "./ToDo/slice";
+import { holidaysReducer } from "./CountryAndHolidays/slice";
 
 
 
@@ -28,6 +29,7 @@ export const store = configureStore({
   reducer: {
     auth: persistReducer<AuthState>(authPersistConfig, authReducer),
     todo: todoReducer,
+    holidays: holidaysReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

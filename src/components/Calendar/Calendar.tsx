@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ButtonStyle, StyledCalendarMonth, StyledCurrentHead, StyledDay, StyledDayHeader, StyledDays, StyledDaysGrid, StyledEmptyDay, StyledTodo, StyledTodoList } from './Calendar.styled';
+import { ButtonStyle, StyledCalendarMonth, StyledCurrentHead, StyledDay, StyledDayHeader, StyledDays, StyledDaysGrid, StyledEmptyDay, StyledHoliday, StyledTodo, StyledTodoList } from './Calendar.styled';
 import BasicModal from '../Modal/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectTodo } from '../../Redux/ToDo/selectors';
@@ -7,6 +7,8 @@ import { editTodoPosition, refreshTodo } from '../../Redux/ToDo/operations';
 import { Dispatch } from '../../Redux/store';
 import { nanoid } from 'nanoid'
 import TodoModal from '../TodoModal/TodoModal';
+import { GetPublicHolidays, fetchLocation } from '../../Redux/CountryAndHolidays/apiOperatins';
+import { selectHoliday } from '../../Redux/CountryAndHolidays/selectors';
 // import { sortedTodoByTime } from '../../Redux/Filter/selectors';
 // import { onFilter } from '../../Redux/Filter/slice';
 
@@ -26,46 +28,72 @@ interface Todo {
   time: string;
 }
 
-const CalendarMonth: React.FC<CalendarMonthProps> = ({ year }) => {
-  const TODO: Todo[] = useSelector(selectTodo);
+  const CalendarMonth: React.FC<CalendarMonthProps> = ({ year }) => {
 
-  console.log(TODO);
-  
+ const dispatch = useDispatch() as Dispatch;
+ const TODO: Todo[] = useSelector(selectTodo);
+ const holidays = useSelector(selectHoliday)
+
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth() + 1;
+  const currentDay = currentDate.getDate();
+
+  const [country, setCountry] = useState('' || 'de');
+  const [selectedMonth, setSelectedMonth] = useState(currentMonth);
+  const [draggedTodo, setDraggedTodo] = useState<Todo | null>(null);
+
+  const daysInMonth = new Date(currentYear, selectedMonth, 0).getDate();
+  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+  const firstDayOfWeek = new Date(currentYear, selectedMonth - 1, 1).getDay();
+
   const sortedTODO = [...TODO].sort((a, b) => {
-    const timeA = a?.time || ""; // Если a.time определено, используем его, иначе используем пустую строку
-    const timeB = b?.time || ""; // Аналогично для b.time
+    const timeA = a?.time || ""; 
+    const timeB = b?.time || ""; 
     return timeA.localeCompare(timeB);
   });
 
-  console.log(sortedTODO);
-  const dispatch = useDispatch() as Dispatch;
-
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const currentMonth = currentDate.getMonth() + 1;
-
-    const handleNextMonth = () => {
-      setSelectedMonth((prevMonth) => (prevMonth === 12 ? 1 : prevMonth + 1));
-    };
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(async (position) => {
+      try {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
   
-    const handlePrevMonth = () => {
-      setSelectedMonth((prevMonth) => (prevMonth === 1 ? 12 : prevMonth - 1));
-    };
-    const [selectedMonth, setSelectedMonth] = useState(currentMonth);
-    const [draggedTodo, setDraggedTodo] = useState<Todo | null>(null);
+        const response = await fetchLocation({ latitude, longitude });
+        setCountry(response);
+      } catch (error) {
+        console.error('Ошибка при получении местоположения:', error);
+      }
+    }, (error) => {
+      console.error('Ошибка геолокации:', error.message);
+    });
+  } else {
+    console.error('Геолокация не поддерживается вашим браузером');
+  }
+  
 
- 
+  
+
+  const handleNextMonth = () => {
+      setSelectedMonth((prevMonth) => (prevMonth === 12 ? 1 : prevMonth + 1));
+  };
+  
+  const handlePrevMonth = () => {
+      setSelectedMonth((prevMonth) => (prevMonth === 1 ? 12 : prevMonth - 1));
+  };
+
+  
  useEffect(() => {
   dispatch(refreshTodo());
-  // dispatch(onFilter(TODO))
   
 }, [dispatch]);
 
-    const currentDay = currentDate.getDate();
-    const daysInMonth = new Date(currentYear, selectedMonth, 0).getDate();
+useEffect(() => {
+  dispatch(GetPublicHolidays({ year: currentYear.toString(), countryCode: country }));
   
-    const firstDayOfWeek = new Date(currentYear, selectedMonth - 1, 1).getDay();
-    const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+}, [dispatch, currentYear, country]);
+
+
   
     const onDragStart = (event: React.DragEvent, todo: Todo) => {
       event.dataTransfer.setData('text/plain', ''); 
@@ -96,7 +124,6 @@ const CalendarMonth: React.FC<CalendarMonthProps> = ({ year }) => {
   
     return (
       <StyledCalendarMonth>
-        
         <ButtonStyle>
         <button onClick={handlePrevMonth}>&lt;</button>
         <h2>{new Date(year, selectedMonth - 1).toLocaleString('default', { month: 'long' })} {currentYear}</h2>
@@ -114,35 +141,61 @@ const CalendarMonth: React.FC<CalendarMonthProps> = ({ year }) => {
           {Array.from({ length: firstDayOfWeek }, (_, i) => (
             <StyledEmptyDay key={`empty-${i}`} />
           ))}
-         {days.map((day) => (
-          <StyledDay
-            key={day}
-            onDragOver={(e) => onDragOver(e)}
-            onDrop={(e) => handleDrop(e, day)}
-          >
-              <div>
-              {day === currentDay && currentMonth === selectedMonth ? (<StyledCurrentHead>{day}</StyledCurrentHead>):(<span>{day}</span>)}
-                  <StyledTodoList>
-                    {sortedTODO
-                    .map((todo: Todo) => ( todo.position === day.toString() && todo.month === selectedMonth.toString() &&
-                      <StyledTodo
-                        key={nanoid()}
-                        draggable
-                        onDragStart={(e) => onDragStart(e, todo)}
-                      ><span>{todo.title}</span>
-                        <span>{todo.time}</span>
-                        <TodoModal todo={todo}  day={day.toString()} selectedMonth={selectedMonth.toString()}/>
-                      </StyledTodo>
-                    ))}
-                  </StyledTodoList>
-              </div>
-         
-         <BasicModal day={day.toString()} selectedMonth={selectedMonth.toString()}/>
-          </StyledDay>
-          
-))}
+{days.map((day) => {
+  const formattedDay = day < 10 ? `0${day}` : `${day}`;
+  const formattedMonth = selectedMonth < 10 ? `0${selectedMonth}` : `${selectedMonth}`;
+  const formattedDate = `${currentYear}-${formattedMonth}-${formattedDay}`;
+
+  const holiday = holidays.find((h) => {
+    if (h.date === formattedDate) {
+      return h;
+    }
+    return null;
+  });
+  console.log(holiday);
+
+  return (
+    <StyledDay
+      key={day}
+      onDragOver={(e) => onDragOver(e)}
+      onDrop={(e) => handleDrop(e, day)}
+    >
+      <div>
+        {day === currentDay && currentMonth === selectedMonth ? (
+          <StyledCurrentHead>{day}</StyledCurrentHead>
+        ) : (
+          <>
+            <span>{day}</span>
+            {holiday && <StyledHoliday>{holiday.localName}</StyledHoliday>}
+          </>
+        )}
+        <StyledTodoList>
+          {sortedTODO.map((todo: Todo) => {
+            if (todo.position === day.toString() && todo.month === selectedMonth.toString()) {
+              return (
+                <StyledTodo
+                  key={nanoid()}
+                  draggable
+                  onDragStart={(e) => onDragStart(e, todo)}
+                >
+                  <span>{todo.title}</span>
+                  <span>{todo.time}</span>
+    
+                  <TodoModal todo={todo} day={day.toString()} selectedMonth={selectedMonth.toString()} />
+                </StyledTodo>
+              );
+            }
+            return null;
+          })}
+        </StyledTodoList>
+      </div>
+      <BasicModal day={day.toString()} selectedMonth={selectedMonth.toString()} />
+    </StyledDay>
+  );
+})}
         </StyledDaysGrid>
       </StyledCalendarMonth>
+      
     );
   };
   

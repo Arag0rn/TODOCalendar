@@ -5,10 +5,10 @@ axios.defaults.baseURL = 'https://todo-calendar-back.vercel.app';
 
 interface TodoData {
     _id?: string;
+    importance: string;
     title: string;
     position: string;
     description: string;
-    completed: boolean;
     month: string;
     time: string;
   }
@@ -24,8 +24,6 @@ export const addTodo = createAsyncThunk(
       }
     }
   );
-
-  
 
   export const refreshTodo = createAsyncThunk(
     'todo/getAlls',
@@ -57,12 +55,13 @@ export const addTodo = createAsyncThunk(
   export const editTodo = createAsyncThunk(
     'todo/editTodo',
     async (data:TodoData, thunkAPI) => {
-        const { _id, title, description, time } = data;   
+        const { _id, title, description, importance, time } = data;   
       try {
         const response = await axios.patch(`api/todo/${_id}`, {
             title,
             description,
-            time
+            time,
+            importance
         });
         return response.data;
       } catch (error) {
@@ -70,3 +69,16 @@ export const addTodo = createAsyncThunk(
       }
     }
   )
+
+  export const deleteTodo = createAsyncThunk(
+    'todo/deleteTodo',
+    async function(_id) {  
+      try {
+        const response = await axios.delete(`api/todo/${_id}`)
+        return response.data
+      } catch (error) {
+        return (error)
+      }
+    }
+  )
+

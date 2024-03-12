@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import { addTodo, editTodo, editTodoPosition, refreshTodo } from './operations';
+import { addTodo, deleteTodo, editTodo, editTodoPosition, refreshTodo } from './operations';
 
 export interface TodoState {
   todos: Array<{
@@ -10,6 +10,7 @@ export interface TodoState {
     completed: boolean;
     month: string;
     time: string;
+    importance: string;
     _id?: string;
   }>;
   isLoading: boolean,
@@ -25,7 +26,8 @@ const initialState: InitState = {
       position: '',
       completed: false,
       month: '',
-      time: ''
+      time: '',
+      importance: '',
     },
   ],
   isLoading: false,
@@ -40,7 +42,6 @@ const todoSlice = createSlice({
     // fulfilled
     builder.addCase(addTodo.fulfilled, (state, action) => {
     state.todos.push(action.payload);
-      toast.success('Registration successful!');
     });
 
     builder.addCase(refreshTodo.fulfilled, (state, action) => {
@@ -62,54 +63,19 @@ const todoSlice = createSlice({
         if (index !== -1) {
           state.todos[index] = { ...state.todos[index], ...updatedTodo };
         }
-      
         state.isLoading = false;
       });
       builder.addCase(editTodoPosition.pending, (state) => {
         state.isLoading = true;
       });
-
-//       state.isLoggedIn = true;
-//       state.isRefreshing = false;
-//       state.isError = false;
-//       toast.success('Login successful!');
-//     });
-//     builder.addCase(logOut.fulfilled, (state) => {
-//       state.user = { email: null, avatarURL: ""};
-//       state.token = null;
-//       state.isLoggedIn = false;
-//       state.isRefreshing = false;
-//       state.isError = false;
-//     });
-//     builder.addCase(refreshUser.fulfilled, (state, action) => {
-//       state.user = action.payload;
-//       state.isLoggedIn = true;
-//       state.isRefreshing = false;
-//     })
-//     //pending
-//     builder.addCase(register.pending, state => {
-//       state.isRefreshing = true;
-//       state.isError = false;
-//     });
-//     builder.addCase(logIn.pending, state => {
-//       state.isRefreshing = true;
-//       state.isError = false;
-//     });
-//     //rejected
-//     builder.addCase(logIn.rejected, (state) => {
-//       state.isRefreshing = false;
-//       toast.error(`Some error, try again`);
-//     });
-//     builder.addCase(register.rejected, (state) => {
-//       state.isRefreshing = false;
-//       toast.error(`Some error, try again`);
-//     });
-//     builder.addCase(refreshUser.rejected, (state) => {
-//       state.isRefreshing = false;
-//       toast.error(`Some error, try again`);
-//     })
+      builder.addCase(deleteTodo.fulfilled, (state, action ) => {
+        state.todos = state.todos.filter(todo => todo._id !== action.meta.arg);
+        toast.success('Todo was deleted!');
+        state.isLoading = false;
+      });
   },
 });
+
 
 
 export const todoReducer = todoSlice.reducer;

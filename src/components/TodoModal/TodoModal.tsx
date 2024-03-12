@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { useState } from 'react';
 import { Field, Form, Formik } from 'formik';
-import { editTodo } from '../../Redux/ToDo/operations';
+import { deleteTodo, editTodo } from '../../Redux/ToDo/operations';
 import { useDispatch } from 'react-redux';
 import { Dispatch } from '../../Redux/store';
 import AddIcon from '../images/addBytton.svg';
@@ -24,18 +24,16 @@ const style = {
   p: 4,
 };
 
-export default function TodoModal({ day, selectedMonth, todo }: 
+export default function TodoModal({todo }: 
     { 
-    day: string, 
-    selectedMonth: string,
     todo: 
         { 
         title: string;
         position: string;
         description: string;
-        completed: boolean;
         month:string;
         time: string;
+        importance: string;
         _id?: string;
     }}
 ) 
@@ -63,9 +61,9 @@ export default function TodoModal({ day, selectedMonth, todo }:
             title: todo.title,
             position: todo.position,
             description: todo.description,
-            completed: false,
-            month:selectedMonth,
+            month:todo.month,
             time: todo.time,
+            importance: todo.importance,
             _id: todo._id
           }}
           onSubmit={async (values, action) => {
@@ -73,14 +71,15 @@ export default function TodoModal({ day, selectedMonth, todo }:
             await dispatch(
                 editTodo({
                 title: values.title,
-                position: day,
+                position: todo.position,
                 description: values.description,
-                completed: values.completed,
-                month: selectedMonth,
+                month: todo.month,
                 time: values.time,
+                importance: values.importance,
                 _id: todo._id
               })
             );
+             handleClose()
           }}
         >
         <Form>
@@ -97,11 +96,19 @@ export default function TodoModal({ day, selectedMonth, todo }:
                 />
               </div>
               <div>
-                <label htmlFor="completed">Completed:</label>
-                <Field type="checkbox" id="completed" name="completed" />
+              <Field as="select" id="importance" name="importance">
+                  <option value="High">High</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Low">Low</option>
+               </Field>
               </div>
               <div>
                 <button type="submit">Edit</button>
+                <button 
+                    type="button" 
+                    onClick={() => todo._id && dispatch(deleteTodo(todo._id))}>
+                    Delete
+                  </button>
               </div>
         </Form>
 

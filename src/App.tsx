@@ -30,16 +30,22 @@ export const App =()=>{
       <>
       <Routes>
       <Route path="/" element={<Layout/>}>
+
       <Route path="/filter-todo" element={
               <Wrapper>
-              <PrivateRoute redirectTo="/" element={<FilterTodo />} />
+              <PrivateRoute redirectTo="/signin" element={<FilterTodo />} />
               </Wrapper>
             }/> 
-      <Route index element={<CalendarPage />} /> 
+       <Route path="/" element={
+             
+              <PrivateRoute redirectTo="/signin" element={<CalendarPage />} />
+  
+            }/> 
+
       </Route>
       <Route
             path="/signin"
-            element={
+            index element={
               <Wrapper>
               <RestrictedRoute redirectTo="/" element={<SignInPage />} />
               </Wrapper>

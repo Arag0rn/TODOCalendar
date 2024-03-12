@@ -28,7 +28,8 @@ export const HeaderWrap = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: space-between;
+  justify-content: flex-end;
+  gap: 20px;
   align-items: center;
   width: 100%;
   height: 48px;
@@ -63,4 +64,9 @@ export const StyledNavLink = styled(NavLink)`
     transform: scale(1.1);
   }
   text-decoration: none;
+`;
+
+export const LogOut = styled.button`
+    color:green;
+    border: none;
 `;

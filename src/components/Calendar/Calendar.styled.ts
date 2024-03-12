@@ -66,6 +66,7 @@ export const StyledTodo = styled.div`
     grid-template-columns: 2fr 2fr 1fr;
     align-items: center;
     background-color: #abf7b5;
+    color: white;
 `;
 
 export const StyledCurrentHead = styled.span`
@@ -79,7 +80,6 @@ export const StyledTodoList = styled.ul`
   margin-top: 5px;
   display: flex;
   flex-direction: column;
-
   gap: 5px;
 
 `;

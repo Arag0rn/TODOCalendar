@@ -11,6 +11,7 @@ export const StyledTodoLi = styled.li`
   display: flex;
   width: 150px;
   background-color: #abf7b5;
+  color: white;
 `;
 
 export const InputFilter = styled.input`

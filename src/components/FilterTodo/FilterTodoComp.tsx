@@ -6,6 +6,7 @@ import { NavLink } from "react-router-dom";
 import { InputFilter, StyledTodoLi, StyledTodoUl } from "./FilterTodoComp.style";
 import { onFilter } from "../../Redux/Filter/slice";
 import { filteredTodos } from "../../Redux/Filter/selector";
+import TodoModal from "../TodoModal/TodoModal";
 
 
 
@@ -38,9 +39,20 @@ useEffect(() => {
       />
     <StyledTodoUl>
     {TODO.map((todo)=>
-    <StyledTodoLi>{todo.title}</StyledTodoLi>
+    <StyledTodoLi  style={
+        todo.importance === "High"
+          ? { backgroundColor: "red" } 
+          : todo.importance === "Medium"
+          ? { backgroundColor: "#eb8034" } 
+          : todo.importance === "Low"
+          ? { backgroundColor: "green" } 
+          : {} 
+      }>{todo.title}
+      <TodoModal todo={todo}/>
+      </StyledTodoLi>
     )}
     </StyledTodoUl>
+    
     </>
   )
 }

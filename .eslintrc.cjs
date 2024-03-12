@@ -14,5 +14,6 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
-  },
+    "max-params": "off",
+  }
 }

@@ -46,9 +46,9 @@ export default function BasicModal({ day, selectedMonth }: { day: string, select
             title: '',
             position: '',
             description: '',
-            completed: false,
             month:'',
-            time: ''
+            time: '',
+            importance: 'Medium',
           }}
           onSubmit={async (values, action) => {
             action.resetForm();
@@ -57,9 +57,9 @@ export default function BasicModal({ day, selectedMonth }: { day: string, select
                 title: values.title,
                 position: day,
                 description: values.description,
-                completed: values.completed,
                 month: selectedMonth,
                 time: values.time,
+                importance: values.importance,
               })
             );
           }}
@@ -77,10 +77,11 @@ export default function BasicModal({ day, selectedMonth }: { day: string, select
                   name="time"
                 />
               </div>
-              <div>
-                <label htmlFor="completed">Completed:</label>
-                <Field type="checkbox" id="completed" name="completed" />
-              </div>
+              <Field as="select" id="importance" name="importance" defaultValue="Medium">
+                  <option value="High">High</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Low">Low</option>
+               </Field>
               <div>
                 <button type="submit">Submit</button>
               </div>

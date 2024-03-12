@@ -24,9 +24,10 @@ export interface Todo {
   title: string;
   position: string;
   description: string;
-  completed: boolean;
   month:string;
   time: string;
+  importance:string;
+  _id?: string;
 }
 
   const CalendarMonth: React.FC<CalendarMonthProps> = ({ year }) => {
@@ -72,9 +73,6 @@ export interface Todo {
     console.error('Geolocation failed');
   }
   
-
-  
-
   const handleNextMonth = () => {
       setSelectedMonth((prevMonth) => (prevMonth === 12 ? 1 : prevMonth + 1));
   };
@@ -94,8 +92,6 @@ useEffect(() => {
   
 }, [dispatch, currentYear, country]);
 
-
-  
     const onDragStart = (event: React.DragEvent, todo: Todo) => {
       event.dataTransfer.setData('text/plain', ''); 
       setDraggedTodo(todo);
@@ -174,23 +170,31 @@ useEffect(() => {
         )}
         {holiday && <StyledHoliday>{holiday.localName}</StyledHoliday>}
         <StyledTodoList>
-          {sortedTODO.map((todo: Todo) => {
-            if (todo.position === day.toString() && todo.month === selectedMonth.toString()) {
-              return (
-                <StyledTodo
-                  key={nanoid()}
-                  draggable
-                  onDragStart={(e) => onDragStart(e, todo)}
-                >
-                  <span>{todo.title}</span>
-                  <span>{todo.time}</span>
-    
-                  <TodoModal todo={todo} day={day.toString()} selectedMonth={selectedMonth.toString()} />
-                </StyledTodo>
-              );
-            }
-            return null;
-          })}
+        {sortedTODO.map((todo: Todo) => {
+  if (todo.position === day.toString() && todo.month === selectedMonth.toString()) {
+    return (
+      <StyledTodo
+        key={nanoid()}
+        draggable
+        onDragStart={(e) => onDragStart(e, todo)}
+        style={
+          todo.importance === "High"
+            ? { backgroundColor: "#bf1111" } 
+            : todo.importance === "Medium"
+            ? { backgroundColor: "#eb8034" } 
+            : todo.importance === "Low"
+            ? { backgroundColor: "green" } 
+            : {} 
+        }
+      >
+        <span>{todo.title}</span>
+        <span>{todo.time}</span>
+        <TodoModal todo={todo} />
+      </StyledTodo>
+    );
+  }
+  return null;
+})}
         </StyledTodoList>
       </div>
       <BasicModal day={day.toString()} selectedMonth={selectedMonth.toString()} />

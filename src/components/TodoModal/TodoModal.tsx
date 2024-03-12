@@ -45,6 +45,10 @@ export default function TodoModal({todo }:
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const handleDeleteTodo = (_id: string) => {
+    dispatch(deleteTodo(_id));
+  };
+
 
   return (
     <div>
@@ -106,7 +110,7 @@ export default function TodoModal({todo }:
                 <button type="submit">Edit</button>
                 <button 
                     type="button" 
-                    onClick={() => todo._id && dispatch(deleteTodo(todo._id))}>
+                    onClick={() => todo._id && handleDeleteTodo(todo._id)}>
                     Delete
                   </button>
               </div>

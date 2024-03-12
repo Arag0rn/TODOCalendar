@@ -9,6 +9,7 @@ import { nanoid } from 'nanoid'
 import TodoModal from '../TodoModal/TodoModal';
 import { GetPublicHolidays, fetchLocation } from '../../Redux/CountryAndHolidays/apiOperatins';
 import { selectHoliday } from '../../Redux/CountryAndHolidays/selectors';
+import { NavLink } from 'react-router-dom';
 // import { sortedTodoByTime } from '../../Redux/Filter/selectors';
 // import { onFilter } from '../../Redux/Filter/slice';
 
@@ -17,7 +18,7 @@ interface CalendarMonthProps {
   month: number;
 }
 
-interface Todo {
+export interface Todo {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [x: string]: any;
   title: string;
@@ -62,13 +63,13 @@ interface Todo {
         const response = await fetchLocation({ latitude, longitude });
         setCountry(response);
       } catch (error) {
-        console.error('Ошибка при получении местоположения:', error);
+        console.error(error);
       }
     }, (error) => {
-      console.error('Ошибка геолокации:', error.message);
+      console.error(error.message);
     });
   } else {
-    console.error('Геолокация не поддерживается вашим браузером');
+    console.error('Geolocation failed');
   }
   
 
@@ -130,6 +131,8 @@ useEffect(() => {
         <button onClick={handleNextMonth}>&gt;</button>
       </ButtonStyle>
 
+      <NavLink to={'/filter-todo'}>Sort Todo</NavLink>
+
         <StyledDays>
           {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
           <StyledDayHeader key={day}>
@@ -166,9 +169,10 @@ useEffect(() => {
         ) : (
           <>
             <span>{day}</span>
-            {holiday && <StyledHoliday>{holiday.localName}</StyledHoliday>}
+            
           </>
         )}
+        {holiday && <StyledHoliday>{holiday.localName}</StyledHoliday>}
         <StyledTodoList>
           {sortedTODO.map((todo: Todo) => {
             if (todo.position === day.toString() && todo.month === selectedMonth.toString()) {

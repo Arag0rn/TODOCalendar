@@ -79,7 +79,6 @@ const authSlice = createSlice({
     });
     builder.addCase(refreshUser.rejected, (state) => {
       state.isRefreshing = false;
-      toast.error(`Some error, try again`);
     })
   },
 });

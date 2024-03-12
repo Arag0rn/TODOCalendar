@@ -85,10 +85,8 @@ export const StyledTodoList = styled.ul`
 `;
 
 export const StyledHoliday = styled.span`
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
+  display: block;
   color:red;
   opacity: 0.5;
-  transform: translateX(-50%);
+ 
 `;

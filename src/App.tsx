@@ -11,6 +11,8 @@ import { SignUpPage } from './pages/SignUpPage';
 import { refreshUser } from './Redux/Auth/operations';
 import { Dispatch } from './Redux/store';
 import { CalendarPage } from './pages/Calendar.page';
+import { FilterTodo } from './pages/FilterTodo';
+import { PrivateRoute } from './components/PrivateRoute';
 
 export const App =()=>{
   const dispatch: Dispatch  = useDispatch();
@@ -28,6 +30,11 @@ export const App =()=>{
       <>
       <Routes>
       <Route path="/" element={<Layout/>}>
+      <Route path="/filter-todo" element={
+              <Wrapper>
+              <PrivateRoute redirectTo="/" element={<FilterTodo />} />
+              </Wrapper>
+            }/> 
       <Route index element={<CalendarPage />} /> 
       </Route>
       <Route

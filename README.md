@@ -1,32 +1,31 @@
+# Description
+
+This project is a web application for managing a todo list with user authentication. Users can create, view, edit, and delete tasks, as well as filter them by various criteria.
+
+# Features
+User authentication.
+Adding new tasks.
+Viewing the list of tasks.
+Editing existing tasks.
+Deleting tasks.
+Filtering tasks by different criteria (e.g., title, month, and importance).
+
+
+# Technologies
+
+React.js for building the user interface.
+Redux Toolkit for managing the application state.
+Node.js and Express.js for creating the server-side of the application.
+MongoDB for storing user and task data.
+
 # React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Install dependencies by running the command npm install in the project root directory.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Start the client-side of the application by running the command npm start in the project root directory.
 
-## Expanding the ESLint configuration
+Open a web browser and navigate to http://http://localhost:5173/.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
-# TODOlist
-# TODOlist
+# Author
+[Serhi khabuzov] - [\[My portfolio\]](https://khabuzovs-portfolio.vercel.app/de)

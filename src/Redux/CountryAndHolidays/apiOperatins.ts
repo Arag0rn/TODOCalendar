@@ -14,10 +14,10 @@ interface CountryData {
         const apiUrl = `https://api.opencagedata.com/geocode/v1/json?key=${apiKey}&q=${latitude}+${longitude}&pretty=1`;
 
         const response = await axios.get(apiUrl);
-        return response.data.results[0]?.components?.country_code || 'Не удалось определить страну';
+        return response.data.results[0]?.components?.country_code || 'Cant find country';
 
       } catch (error) {
-        console.error('Ошибка при геокодировании:', error);
+        console.error('Gps error:', error);
       }
     };
 

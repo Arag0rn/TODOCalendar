@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ButtonStyle, StyledCalendarMonth, StyledCurrentHead, StyledDay, StyledDayHeader, StyledDays, StyledDaysGrid, StyledEmptyDay, StyledHoliday, StyledTodo, StyledTodoList } from './Calendar.styled';
+import { ButtonStyle, StyledArrows, StyledCalendarMonth, StyledCurrentHead, StyledDay, StyledDayHeader, StyledDays, StyledDaysGrid, StyledEmptyDay, StyledHoliday, StyledTodo, StyledTodoList } from './Calendar.styled';
 import BasicModal from '../Modal/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectTodo } from '../../Redux/ToDo/selectors';
@@ -9,9 +9,9 @@ import { nanoid } from 'nanoid'
 import TodoModal from '../TodoModal/TodoModal';
 import { GetPublicHolidays, fetchLocation } from '../../Redux/CountryAndHolidays/apiOperatins';
 import { selectHoliday } from '../../Redux/CountryAndHolidays/selectors';
-import { NavLink } from 'react-router-dom';
-// import { sortedTodoByTime } from '../../Redux/Filter/selectors';
-// import { onFilter } from '../../Redux/Filter/slice';
+import Left from '../images/left.png';
+import Right from '../images/right.png';
+
 
 interface CalendarMonthProps {
   year: number;
@@ -41,7 +41,7 @@ export interface Todo {
   const currentMonth = currentDate.getMonth() + 1;
   const currentDay = currentDate.getDate();
 
-  const [country, setCountry] = useState('' || 'de');
+  const [country, setCountry] = useState('' || 'ua');
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
   const [draggedTodo, setDraggedTodo] = useState<Todo | null>(null);
 
@@ -122,12 +122,12 @@ useEffect(() => {
     return (
       <StyledCalendarMonth>
         <ButtonStyle>
-        <button onClick={handlePrevMonth}>&lt;</button>
+        <StyledArrows src={Left} onClick={handlePrevMonth}></StyledArrows>
         <h2>{new Date(year, selectedMonth - 1).toLocaleString('default', { month: 'long' })} {currentYear}</h2>
-        <button onClick={handleNextMonth}>&gt;</button>
+        <StyledArrows src={Right} onClick={handleNextMonth}></StyledArrows>
       </ButtonStyle>
 
-      <NavLink to={'/filter-todo'}>Sort Todo</NavLink>
+     
 
         <StyledDays>
           {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (

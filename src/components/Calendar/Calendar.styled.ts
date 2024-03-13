@@ -18,7 +18,7 @@ export const StyledDaysHeader = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 5px;
-  background-color: #eee;
+  background-color: #f5f2c6;
 `;
 
 export const StyledDayHeader = styled.div`
@@ -37,8 +37,9 @@ export const StyledDay = styled.div`
     position: relative;
   padding: 10px;
   min-height:100px;
-  background-color: #f2f0ed;
-  border: 1px solid #ddd;
+  background-color: #f5f2c6;
+  border-radius:15px;
+  border: none;
 `;
 
 export const StyledEmptyDay = styled.div`
@@ -51,6 +52,7 @@ export const CurrentDayStyle = styled.div`
 
 export const ButtonStyle = styled.div`
     display:flex;
+    align-items: center;
 `;
 
 export const Todo = styled.button`
@@ -60,6 +62,7 @@ export const Todo = styled.button`
     width: 30px;
     height: 30px;
     border-radius: 50%;
+    
 `;
 export const StyledTodo = styled.div`
     display: grid;
@@ -67,6 +70,7 @@ export const StyledTodo = styled.div`
     align-items: center;
     background-color: #abf7b5;
     color: white;
+    font-size: 13px;
 `;
 
 export const StyledCurrentHead = styled.span`
@@ -81,12 +85,21 @@ export const StyledTodoList = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 5px;
-
 `;
 
 export const StyledHoliday = styled.span`
   display: block;
   color:red;
   opacity: 0.5;
+
+`;
+
+export const StyledArrows = styled.img`
+cursor: pointer;
+transition: scale 250ms cubic-bezier(0.4, 0, 0.8, 1);
+    &:hover{
+      scale: 110%;
+    }
  
 `;
+

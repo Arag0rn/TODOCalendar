@@ -2,12 +2,13 @@ import Box from '@mui/material/Box';
 
 import Modal from '@mui/material/Modal';
 import { useState } from 'react';
-import { Field, Form, Formik } from 'formik';
+import { Field, Formik } from 'formik';
 import { addTodo } from '../../Redux/ToDo/operations';
 import { useDispatch } from 'react-redux';
 import { Dispatch } from '../../Redux/store';
 import { StyledButton } from './Modal.styled';
 import AddIcon from '../images/addBytton.svg';
+import { ButtonModal, StyledField, StyledForm } from '../TodoModal/TodoModal.styled';
 
 
 const style = {
@@ -15,9 +16,10 @@ const style = {
   top: '50%',
   left: '50%',
   display: 'flex',
+  justifyContent: 'center',
   transform: 'translate(-50%, -50%)',
   width: 400,
-  bgcolor: 'background.paper',
+  bgcolor: '#f5f2c6',
   borderRadius: "15px",
   border: 'none',
   boxShadow: 24,
@@ -62,16 +64,24 @@ export default function BasicModal({ day, selectedMonth }: { day: string, select
                 importance: values.importance,
               })
             );
+            handleClose();
           }}
         >
-        <Form>
+        <StyledForm>
    
-                <Field type="text" id="title" name="title" placeholder="Title"/>
+                <StyledField type="text" id="title" name="title" placeholder="Title"/>
 
-                <Field type="text" id="description" name="description"  placeholder="Description"/>
+                <StyledField 
+                type="text" 
+                id="description" 
+                name="description"  
+                placeholder="Description"
+                component="textarea"
+                cols="30"
+                rows="5"/>
               <div>
               <label htmlFor="timeInput"></label>
-                <Field
+                <StyledField
                   type="time"
                   id="time"
                   name="time"
@@ -83,9 +93,9 @@ export default function BasicModal({ day, selectedMonth }: { day: string, select
                   <option value="Low">Low</option>
                </Field>
               <div>
-                <button type="submit">Submit</button>
+                <ButtonModal type="submit">Submit</ButtonModal>
               </div>
-        </Form>
+        </StyledForm>
 
         </Formik>
         </Box>

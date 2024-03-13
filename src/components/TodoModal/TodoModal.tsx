@@ -2,12 +2,12 @@ import Box from '@mui/material/Box';
 
 import Modal from '@mui/material/Modal';
 import { useState } from 'react';
-import { Field, Form, Formik } from 'formik';
+import { Field, Formik } from 'formik';
 import { deleteTodo, editTodo } from '../../Redux/ToDo/operations';
 import { useDispatch } from 'react-redux';
 import { Dispatch } from '../../Redux/store';
 import AddIcon from '../images/addBytton.svg';
-import { StyledButton, StyledField } from './TodoModal.styled';
+import { ButtonBox, ButtonModal, StyledButton, StyledField, StyledForm } from './TodoModal.styled';
 
 
 const style = {
@@ -15,9 +15,10 @@ const style = {
   top: '50%',
   left: '50%',
   display: 'flex',
+  justifyContent: 'center',
   transform: 'translate(-50%, -50%)',
   width: 400,
-  bgcolor: 'background.paper',
+  bgcolor: ' #f5f2c6',
   borderRadius: "15px",
   border: 'none',
   boxShadow: 24,
@@ -86,14 +87,20 @@ export default function TodoModal({todo }:
              handleClose()
           }}
         >
-        <Form>
+        <StyledForm>
    
                 <StyledField type="text" id="title" name="title" placeholder="Title"/>
 
-                <StyledField type="text" id="description" name="description"  placeholder="Description"/>
+                <StyledField 
+                type="text" 
+                id="description" 
+                name="description"  
+                placeholder="Description"
+                component="textarea"
+                cols="30"
+                rows="5"/>
               <div>
-              <label htmlFor="timeInput"></label>
-                <Field
+                <StyledField
                   type="time"
                   id="time"
                   name="time"
@@ -106,15 +113,15 @@ export default function TodoModal({todo }:
                   <option value="Low">Low</option>
                </Field>
               </div>
-              <div>
-                <button type="submit">Edit</button>
-                <button 
+              <ButtonBox>
+                <ButtonModal type="submit">Edit</ButtonModal>
+                <ButtonModal 
                     type="button" 
                     onClick={() => todo._id && handleDeleteTodo(todo._id)}>
                     Delete
-                  </button>
-              </div>
-        </Form>
+                  </ButtonModal>
+              </ButtonBox>
+        </StyledForm>
 
         </Formik>
         </Box>

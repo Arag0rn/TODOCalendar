@@ -50,23 +50,36 @@ export const HeaderWrap = styled.div`
   }
 `;
 
-export const LogoStyled = styled.img`
-  width: 102px;
-  height: 48px;
-`;
 
-export const StyledNavLink = styled(NavLink)`
-  align-items: center;
-  cursor: pointer;
-  transition: all 0.3s;
-  &:hover,
-  &:focus {
-    transform: scale(1.1);
-  }
-  text-decoration: none;
-`;
+
 
 export const LogOut = styled.button`
-    color:green;
+    display: flex;
+    padding: 5px 18px;
+    justify-content: center;
+    align-items: center;
+    color:  #FCFBF5;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px; 
+    text-transform: uppercase;
+    gap: 10px;
     border: none;
+    border-radius: 10px;
+    background-color: #4753AB;
+    transition: background-color 250ms cubic-bezier(0.4, 0, 0.8, 1);
+    cursor: pointer;
+    &:hover{
+        background-color: #5461c0;
+    }
+`;
+
+export const NavLinkStyled = styled(NavLink)`
+  color: white;
+  text-decoration: none;
+  transition: color 250ms cubic-bezier(0.4, 0, 0.8, 1);
+  &:hover{
+      color: #5461c0;
+    }
 `;

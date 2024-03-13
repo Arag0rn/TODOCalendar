@@ -25,7 +25,7 @@ Install dependencies by running the command npm install in the project root dire
 
 Start the client-side of the application by running the command npm start in the project root directory.
 
-Open a web browser and navigate to http://http://localhost:5173/.
+Open a web browser and navigate to http://localhost:5173/.
 
 # Author
 [Serhi khabuzov] - [\[My portfolio\]](https://khabuzovs-portfolio.vercel.app/de)

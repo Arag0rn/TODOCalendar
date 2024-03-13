@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { useAuth } from './hooks/useAuth';
 import { RestrictedRoute } from './components/RestrictedRoute';
 import { SignInPage } from './pages/SignInPage';
-import { Wrapper } from './components/Container/Container.styled';
+import { CalendarWrapper, Wrapper } from './components/Container/Container.styled';
 import { SignUpPage } from './pages/SignUpPage';
 import { refreshUser } from './Redux/Auth/operations';
 import { Dispatch } from './Redux/store';
@@ -37,9 +37,9 @@ export const App =()=>{
               </Wrapper>
             }/> 
        <Route path="/" element={
-             
+             <CalendarWrapper>
               <PrivateRoute redirectTo="/signin" element={<CalendarPage />} />
-  
+              </CalendarWrapper>
             }/> 
 
       </Route>

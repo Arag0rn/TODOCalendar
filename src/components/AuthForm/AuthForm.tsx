@@ -6,7 +6,6 @@ import {
   ErMsg,
   ForFormContainer,
   FormBtnStyled,
-  GoogleBtn,
   SightUp,
   StyledBtn,
   StyledField,
@@ -16,7 +15,6 @@ import {
 import { useNavigate } from 'react-router-dom';
 import iconeye from '../images/AuthForm/show_icon.svg';
 import hidepas from '../images/AuthForm/hide_icon.svg';
-import google from '../images/AuthForm/google-icon.png';
 import { useEffect, useState } from 'react';
 import { logIn } from '../../Redux/Auth/operations';
 import { Dispatch } from '../../Redux/store';
@@ -60,7 +58,6 @@ export const AuthForm = () => {
       window.removeEventListener('resize', handleWindowResize);
     };
   }, [screenSize]);
-
 
   return (
     <>
@@ -118,10 +115,6 @@ export const AuthForm = () => {
 
             <ErMsg component="span" name="password" />
             <FormBtnStyled type="submit">Sign In</FormBtnStyled>
-            <GoogleBtn type="button">
-              <img src={google} alt="Google Icon" width={20} height={20} />
-              Enter with Google
-            </GoogleBtn>
             <BottomBtnBox>
               <SightUp onClick={() => navigate('/signup')}>Sign up</SightUp>
             </BottomBtnBox>

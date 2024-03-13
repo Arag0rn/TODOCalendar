@@ -4,6 +4,7 @@ import { AuthState } from './slice';
 
 axios.defaults.baseURL = 'https://todo-calendar-back.vercel.app';
 
+
 const setAuthHeader = (token: string) => {
   axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 };
